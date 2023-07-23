@@ -1,0 +1,352 @@
+' Gambas class file
+PUBLIC cantArticulos AS Integer = 1
+PUBLIC fechaactual AS Date 
+PUBLIC hora AS Date
+PUBLIC usuario AS String = ""
+PUBLIC vendedor AS String = ""
+PUBLIC ventaTotal AS Float = 0.0
+PUBLIC bandera AS Boolean
+
+PUBLIC SUB _new()
+END
+
+PRIVATE hConn AS Connection
+
+PRIVATE FUNCTION ConectarBase() AS Boolean
+  
+  IF hConn <> NULL THEN RETURN FALSE
+  hConn = NEW Connection
+  hConn.Host = "localhost"
+  hConn.Name = "negocio"
+  hConn.Type = "mysql"
+  hConn.Login = "root"
+  hConn.Password = "juba1537"
+  
+  TRY hconn.Open()
+  IF ERROR THEN 
+    hConn = NULL
+    Message.Error("error al conectar la base de datos")
+    RETURN TRUE
+  END IF 
+  RETURN FALSE
+END 
+
+
+PRIVATE SUB cerrarconecxion()
+  IF hConn = NULL THEN RETURN 
+    hConn.Close()
+    hConn = NULL
+END
+
+
+
+
+PUBLIC SUB Form_Open()
+  
+  FMain.Width = 1024
+  FMain.Height = 768
+  fechaactual = Date(Now)
+  Label11.Text = fechaactual
+  
+  ValueBox6.Value = 0.0
+  TabStrip1.Count = 6
+ 
+  TabStrip1[0].Text = "Login"
+  TabStrip1[1].Text = "Altas"
+  TabStrip1[2].Text = "Ventas"
+  TabStrip1[3].Text = "Stock Vigente"
+  TabStrip1[4].Text = "Ventas realizadas"
+  TabStrip1[5].Text = "Nada por ahora"
+  
+  TabStrip1[1].Enabled = FALSE
+  TabStrip1[2].Enabled = TRUE
+  TabStrip1[3].Visible = FALSE
+  TabStrip1[4].Visible = FALSE
+  
+  
+  ColumnView1.Columns.Count = 4
+ 
+  ColumnView1.Columns[0].Text = "codigo"
+  ColumnView1.Columns[0].Width = 100
+  ColumnView1.Columns[1].Text = "Descripcion"
+  ColumnView1.Columns[1].Width = 400
+  ColumnView1.Columns[2].Text = "Cantidad"
+  ColumnView1.Columns[2].Width = 100
+  ColumnView1.Columns[3].Text = "valor"
+  
+  
+  
+  ColumnView1.Clear
+
+  ColumVentas.Columns.Count = 3
+  ColumVentas.Columns[0].Text = "codigo"
+  ColumVentas.Columns[1].Text = "descripcion"
+  ColumVentas.Columns[1].Width = 400
+  ColumVentas.Columns[2].Text = "precio"
+  ColumVentas.Columns[2].Width = 50
+  
+  ComboBox1.Add("Remera")
+  ComboBox1.Add("Pantalon")
+  ComboBox1.Add("Camisa")
+  ComboBox1.Add("Sweter")
+  ComboBox1.Add("Accesorio")
+  ComboBox1.Add("Calzado")
+  ComboBox1.Add("Jeans")
+  ComboBox1.Add("Blusa")
+  ComboBox1.Add("Guante")
+  ComboBox1.Add("Sombrero")
+  
+
+  
+  
+END
+
+
+PUBLIC SUB Button1_Click()
+
+  
+  IF (TextBox1.Text = "jorge" AND TextBox2.text = "28335541") THEN 
+      TabStrip1[0].Enabled = FALSE
+      TabStrip1[0].Visible = FALSE
+      TabStrip1[1].Enabled = TRUE
+      TabStrip1[2].Enabled = TRUE
+      TabStrip1[3].Enabled = TRUE
+      TabStrip1[3].Visible = TRUE
+      TabStrip1[4].Enabled = TRUE
+      TabStrip1[4].Visible = TRUE
+      vendedor = "jorge"
+      usuario = "jorge"
+
+  ELSE IF (TextBox1.Text = "alejandra" AND TextBox2.text = "alejandra") THEN 
+      vendedor = "alejandra"
+      usuario = "alejandra"
+      TabStrip1[0].Enabled = FALSE
+      TabStrip1[0].Visible = FALSE
+      TabStrip1[1].Enabled = FALSE
+      TabStrip1[1].Visible = FALSE
+      
+
+  ENDIF      
+  
+  
+  
+
+END
+
+
+PUBLIC SUB Button4_Click()
+
+  QUIT 
+
+END
+
+PUBLIC SUB Button3_Click()
+
+  ValueBox1.Value = 0
+  ValueBox2.Value = 0
+  ValueBox3.Value = 0
+  TextBox3.Text = ""
+
+END
+
+
+
+
+'############################################# alta de mercaderia#################
+PUBLIC SUB Button2_Click()
+  IF (ValueBox1.Value <= 0 OR TextBox3.Length = "" OR ValueBox2.Value <= 0 OR ValueBox3.Value <= 0) THEN 
+    Message.Error("la informacion no es correcta")
+    RETURN 
+  END IF
+
+  ConectarBase()  
+  TRY          
+    hconn.Exec("insert into mercaderia values (&1, &2, &3, &4, &5, &6, &7)", ValueBox1.Value, TextBox3.Text, ValueBox2.Value, ValueBox3.value, ValueBox7.Value, ComboBox1.Text, fechaactual) 
+    Message.Info("Mercaderia agregada")
+    ValueBox1.Value = 0
+    TextBox3.Text = "" 
+    ValueBox2.Value = 0
+    ValueBox3.value = 0
+    ValueBox7.Value = 0
+  CATCH 
+    Message.Error("Imposible introducir los datos")
+    hConn.Close
+  
+END 
+
+PUBLIC SUB TextBox3_Change()
+  TextBox3.Text = Upper(TextBox3.Text)  
+END
+
+
+
+PUBLIC SUB ValueBox4_KeyRelease()
+  
+  DIM hResult AS Result
+  DIM Clave AS String
+  ConectarBase()
+  IF (ValueBox4.Length = 0) THEN 
+    ValueBox4.Value = 0
+  END IF
+  hResult = hConn.Exec("select * from mercaderia " & "  where id_merca=" & ValueBox4.Value & " AND  cantidad > 0")
+  ColumnView1.Clear
+  DO WHILE hResult.Available      
+    Clave = hResult["id_merca"]
+    ColumnView1.Add(Clave, Clave)
+    ColumnView1[Clave][0] = hResult["id_merca"]
+    ColumnView1[Clave][1] = hResult["descripcion"]
+    ColumnView1[Clave][2] = hResult["cantidad"]
+    ColumnView1[Clave][3] = hResult["precio"]
+    ColumnView1[Clave][4] = hResult["tipo"]
+    ColumnView1[Clave][5] = hResult["fechaalta"]
+    hResult.MoveNext
+  LOOP
+  cerrarconecxion()
+  clave = NULL
+  hResult = NULL
+END
+
+'################################# agrega item al carrito
+PUBLIC SUB ColumnView1_Click()
+
+  DIM valor AS Integer
+  DIM res AS Integer
+  DIM hResult AS Result
+  DIM Clave AS String
+  DIM preciofinal AS Float
+        res = Message.Question("¿Desea comprar?", "Si", "No")
+   IF (res = 1) THEN 
+          valor = ColumnView1.Key
+          ConectarBase()
+          hResult = hConn.Exec("select * from mercaderia " & "  where id_merca=" & valor)
+        DO WHILE hResult.Available      
+          Clave = hResult["id_merca"]
+          ColumVentas.Add(valor, valor)
+          ColumVentas[valor][0] = hResult["id_merca"]
+          ColumVentas[valor][1] = hResult["descripcion"]
+          preciofinal = hResult["precio"] + ((hResult["precio"] * hResult["ganancia"]) / 100)
+          ColumVentas[valor][2] = preciofinal
+          hResult.MoveNext
+          ventaTotal = ventaTotal + ColumVentas[valor][2]
+          ValueBox8.Value = ventaTotal 
+        LOOP
+ 
+  ELSE 
+
+  ENDIF 
+cerrarconecxion()
+clave = NULL
+hResult = NULL
+ColumnView1.Clear
+ValueBox4.Clear
+ValueBox4.SetFocus
+END
+
+' ############################### Borra item comprado
+PUBLIC SUB ColumVentas_DblClick()
+  IF (ColumVentas.Key <> NULL) THEN
+    Message.Info("Se borra el item")
+    ventaTotal = ventaTotal - ColumVentas[ColumVentas.Key][2]
+    ValueBox8.Value = ventaTotal
+    Slider1_Change()
+    ColumVentas.Item.Delete()
+    IF (ColumVentas.Count = 0) THEN 
+      ventaTotal = 0
+      ValueBox6.Value = 0
+    END IF
+    ValueBox4.SetFocus
+    Slider1_Change()
+    
+  ENDIF 
+END
+
+'################################ Lista de stock ######################################
+PUBLIC SUB TabStrip1_Click()
+          DIM clave2 AS Integer = 1
+          DIM hResult AS Result
+          Columnstockvigente.Columns.Count = 7
+          Columnstockvigente.Columns[0].Text = "Codigo"
+          Columnstockvigente.Columns[1].Text = "Descripcion"
+          Columnstockvigente.Columns[2].Text = "Cantidad"
+          Columnstockvigente.Columns[3].Text = "Precio"
+          Columnstockvigente.Columns[4].Text = "Tipo"
+          Columnstockvigente.Columns[5].Text = "Fecha"
+          Columnstockvigente.Columns[6].Text = "Ganancia"
+          Columnstockvigente.Clear
+          ConectarBase()
+          hResult = hConn.Exec("select * from mercaderia  where cantidad >= 0 order by cantidad desc")
+          DO WHILE hResult.Available  
+            Columnstockvigente.Add(clave2, clave2)
+            Columnstockvigente[clave2][0] = hResult["id_merca"]
+            Columnstockvigente[clave2][1] = hResult["descripcion"]
+            Columnstockvigente[clave2][2] = hResult["cantidad"]
+            Columnstockvigente[clave2][3] = "$" & hResult["precio"]
+            Columnstockvigente[Clave2][4] = hResult["tipo"]
+            Columnstockvigente[Clave2][5] = hResult["fechaalta"]
+            Columnstockvigente[clave2][6] = hResult["ganancia"] & "%"
+            hResult.MoveNext
+            clave2 = clave2 + 1
+          LOOP 
+          cerrarconecxion()
+  
+END
+'################## Realiza Compra ############################
+
+PUBLIC SUB Button5_Click()
+     DIM CantActual AS Integer
+     DIM hResult AS Result
+     DIM codigo AS Integer
+     DIM C AS Integer
+     DIM a AS String
+     DIM auxres AS Integer
+
+'######################## Resta el stock. ########################
+     ColumVentas.MoveFirst
+     ventaTotal = ColumVentas.Count - 1
+     ConectarBase()  
+     
+      FOR C = 0 TO ventaTotal
+        codigo = ColumVentas.Item.Key
+        hResult = hConn.Exec("select * from mercaderia " & "  where id_merca=" & codigo)
+        CantActual = hResult["cantidad"]
+        auxres = CantActual - 1
+        hResult = hConn.Exec("Update mercaderia set cantidad=" & auxres & " where id_merca=" & codigo)
+        ColumVentas.MoveNext
+      NEXT 
+     
+     cerrarconecxion()
+'########################Resta el stock.'########################        
+  
+
+  '########################registra venta..Fecha hora nombre del vendedor   '########################
+    Message.Info("Cantidad de elementos comprados:" & ColumVentas.Count)
+    ventaTotal = ColumVentas.Count - 1
+    ColumVentas.MoveFirst
+    ConectarBase()  
+     hora = Time(Now)
+          FOR C = 0 TO ventaTotal 
+                codigo = ColumVentas.Item.Key
+                hResult = hconn.Exec("insert into ventarealizada values (&1, &2, &3, &4, &5)", "", fechaactual, hora, codigo, vendedor) 
+                ColumVentas.MoveNext
+          NEXT 
+     cerrarconecxion()
+     ValueBox6.value = 0
+     ValueBox8.value = 0
+     Slider1.Value = 0 
+     Label16.Text = 0
+     ColumVentas.Clear
+     ValueBox6.Clear
+END
+
+
+'######################## Aplica decuento a la compra actual '########################
+PUBLIC SUB Slider1_Change()
+DIM total AS Float
+  total = ValueBox8.Value
+  IF (total <> 0) THEN 
+     ValueBox6.Value = Format$((total - ((total * Slider1.Value) / 100)), "##.##")
+     Label16.Text = Slider1.Value & "%"
+     
+ ENDIF 
+END
+

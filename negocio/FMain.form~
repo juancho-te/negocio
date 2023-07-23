@@ -1,0 +1,208 @@
+# Gambas Form File 2.0
+
+{ Form Form
+  MoveScaled(0,0,143,75)
+  Text = ("")
+  { TabStrip1 TabStrip
+    MoveScaled(3,2,107,67)
+    Count = 6
+    Index = 0
+    Text = ("Tab 0")
+    { Label1 Label
+      MoveScaled(33,18,10,3)
+      Text = ("Usuario:")
+    }
+    { Label2 Label
+      MoveScaled(30,22,12,3)
+      Text = ("Contrase\xC3\xB1a:")
+    }
+    { TextBox1 TextBox
+      MoveScaled(43,18,24,3)
+      Text = ("")
+    }
+    { TextBox2 TextBox
+      MoveScaled(43,22,24,3)
+      Text = ("")
+      Password = True
+    }
+    { Button1 Button
+      MoveScaled(47,27,16,3)
+      Text = ("Aceptar")
+    }
+    Index = 1
+    Text = ("Altas")
+    { Frame1 Frame
+      MoveScaled(5,16,68,33)
+      Background = Color.Background
+      Text = ("Formulario alta de mercaderia")
+      { ValueBox7 ValueBox
+        MoveScaled(38,21,7,3)
+        Tag = "5"
+      }
+      { Label9 Label
+        MoveScaled(28,21,8,3)
+        Text = ("Ganancia")
+      }
+      { Label10 Label
+        MoveScaled(32,25,4,3)
+        Text = ("Tipo")
+      }
+      { ComboBox1 ComboBox
+        MoveScaled(38,25,24,3)
+        Text = ("ComboBox1")
+        ReadOnly = True
+      }
+      { TextLabel5 TextLabel
+        MoveScaled(46,21,2,3)
+        Text = ("%")
+      }
+    }
+    { TextLabel1 TextLabel
+      MoveScaled(5,2,78,14)
+      Font = Font["Purisa,Italic,+11"]
+      Text = ("Alta de mercaderia")
+    }
+    { Label3 Label
+      MoveScaled(25,21,17,3)
+      Text = ("Codigo de mercaderia")
+    }
+    { ValueBox1 ValueBox
+      MoveScaled(43,21,24,3)
+      Tag = "1"
+    }
+    { Label4 Label
+      MoveScaled(32,25,13,3)
+      Text = ("Descripci\xC3\xB3n")
+    }
+    { TextBox3 TextBox
+      MoveScaled(43,25,24,3)
+      Tag = "2"
+      Text = (" ")
+      Alignment = Align.Right
+    }
+    { Label5 Label
+      MoveScaled(34,29,14,3)
+      Text = ("Cantidad")
+    }
+    { ValueBox2 ValueBox
+      MoveScaled(43,29,24,3)
+      Tag = "3"
+    }
+    { Label6 Label
+      MoveScaled(30,33,12,3)
+      Text = ("Precio Unitario")
+    }
+    { ValueBox3 ValueBox
+      MoveScaled(43,33,24,3)
+      Tag = "4"
+    }
+    { Button2 Button
+      MoveScaled(23,45,30,3)
+      Text = ("Agregar")
+    }
+    { Button3 Button
+      MoveScaled(54,45,17,3)
+      Text = ("Borrar")
+    }
+    { Label11 Label
+      MoveScaled(63,55,24,3)
+      Text = ("Label11")
+    }
+    Index = 2
+    Text = ("Tab 2")
+    { TextLabel2 TextLabel
+      MoveScaled(3,1,26,9)
+      Font = Font["Purisa,Italic,+11"]
+      Text = ("Ventas")
+    }
+    { Label7 Label
+      MoveScaled(41,6,7,3)
+      Text = ("Codigo:")
+    }
+    { ValueBox4 ValueBox
+      MoveScaled(51,6,24,3)
+    }
+    { ColumnView1 ColumnView
+      MoveScaled(2,11,84,10)
+    }
+    { TextLabel3 TextLabel
+      MoveScaled(64,52,12,4)
+      Font = Font["+4"]
+      Text = ("Total     ")
+    }
+    { ColumVentas ColumnView
+      MoveScaled(2,25,84,25)
+    }
+    { TextLabel4 TextLabel
+      MoveScaled(26,21,44,3)
+      Font = Font["Bold,+3"]
+      Text = ("Lista de productos comprados")
+    }
+    { ValueBox6 ValueBox
+      MoveScaled(75,52,11,6)
+      Font = Font["+5"]
+    }
+    { Button5 Button
+      MoveScaled(1,52,16,3)
+      Text = ("Compra")
+    }
+    { Slider1 Slider
+      MoveScaled(44,54,13,3)
+      MaxValue = 50
+      Mark = True
+    }
+    { Label13 Label
+      MoveScaled(65,55,4,3)
+      Text = ("Final")
+    }
+    { Label14 Label
+      MoveScaled(22,52,9,3)
+      Text = ("Sub. total $")
+    }
+    { ValueBox8 ValueBox
+      MoveScaled(31,52,11,3)
+      ToolTip = ("Sub total sin Descuento")
+      ReadOnly = True
+    }
+    { Label15 Label
+      MoveScaled(46,51,9,3)
+      Text = ("Descuento")
+    }
+    { Label16 Label
+      MoveScaled(49,57,5,3)
+      Text = ("0%")
+    }
+    { TextLabel6 TextLabel
+      MoveScaled(71,52,3,7)
+      Font = Font["+8"]
+      Text = ("$")
+    }
+    Index = 3
+    Text = ("Tab 3")
+    { Label8 Label
+      MoveScaled(4,1,45,7)
+      Font = Font["Purisa,+8"]
+      Text = ("Stock vigente")
+    }
+    { Columnstockvigente ColumnView
+      MoveScaled(4,9,80,47)
+    }
+    Index = 4
+    Text = ("Tab 4")
+    { ColumnView2 ColumnView
+      MoveScaled(5,12,79,43)
+    }
+    { Label12 Label
+      MoveScaled(5,2,39,3)
+      Font = Font["Purisa,+8"]
+      Text = ("Ventas realizadas")
+    }
+    Index = 5
+    Text = ("Tab 5")
+    Index = 0
+  }
+  { Button4 Button
+    MoveScaled(55,70,37,3)
+    Text = ("Salir")
+  }
+}

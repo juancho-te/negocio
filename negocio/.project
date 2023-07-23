@@ -1,0 +1,19 @@
+# Gambas Project File 2.0
+Title=nolose
+Startup=FMain
+Version=1.1.5
+Library=gb.gui
+Library=gb.form
+Library=gb.db
+Library=gb.db.form
+Library=gb.opengl
+Description=Control de stock y ventas
+Authors=juan Alberto Barria
+TabSize=2
+Maintainer=juan
+Address=juan@juandeb
+License=General Public Licence
+Systems=debian
+Menus=Apps/Databases
+Categories=
+Groups=System
